@@ -1,8 +1,8 @@
 import mimetypes
 import posixpath
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
-from django.utils import importlib
+import importlib
 from django.utils.encoding import smart_str
 
 from pipeline.conf import settings
@@ -21,7 +21,7 @@ def to_class(class_str):
 def filepath_to_uri(path):
     if path is None:
         return path
-    return urllib.quote(smart_str(path).replace("\\", "/"), safe="/~!*()'#?")
+    return urllib.parse.quote(smart_str(path).replace("\\", "/"), safe="/~!*()'#?")
 
 
 def guess_type(path, default=None):

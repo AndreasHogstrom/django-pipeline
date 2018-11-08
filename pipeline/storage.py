@@ -95,7 +95,7 @@ class BaseFinderStorage(PipelineStorage):
 
     def listdir(self, path):
         for finder in finders.get_finders():
-            for storage in finder.storages.values():
+            for storage in list(finder.storages.values()):
                 try:
                     return storage.listdir(path)
                 except OSError:

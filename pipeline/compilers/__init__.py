@@ -102,6 +102,6 @@ class SubProcessCompiler(CompilerBase):
             raise CompilerError(error)
 
         if self.verbose:
-            print error
+            print(error)
 
         return compressed_content

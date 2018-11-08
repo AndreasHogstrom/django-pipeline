@@ -18,7 +18,7 @@ class Jinja2Compressed(object):
         if package_type not in ['css', 'js']:
             raise PackageNotFound("Package type must be css or js, supplied %s" % package_type)
         self.package_type = package_type
-        self.loader = FileSystemLoader((app_directories.app_template_dirs +
+        self.loader = FileSystemLoader((app_directories.get_app_template_dirs('templates') +
             django_settings.TEMPLATE_DIRS))
         self.get_pipeline_settings()
 
@@ -48,7 +48,7 @@ class Jinja2Compressed(object):
                 val = val if val else "''"
                 expr = "pipeline_settings.%s = %s" % (
                         setting, val)
-                exec expr
+                exec(expr)
             pipeline_settings.PIPELINE = getattr(django_settings,
                     'PIPELINE', not django_settings.DEBUG)
         self.settings = pipeline_settings
