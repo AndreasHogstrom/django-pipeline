@@ -6,7 +6,7 @@ import subprocess
 
 from itertools import takewhile
 
-from django.utils.encoding import smart_str, force_text as force_unicode
+from django.utils.encoding import smart_bytes, force_text as force_unicode
 
 try:
     from staticfiles import finders
@@ -77,7 +77,7 @@ class Compressor(object):
         if not variant:
             return css
         elif variant == "datauri":
-            return self.with_data_uri(css)
+            return self.with_data_uri(css.decode())
         else:
             raise CompressorError("\"%s\" is not a valid variant" % variant)
 
@@ -141,7 +141,7 @@ class Compressor(object):
 
     def concatenate(self, paths):
         """Concatenate together a list of files"""
-        return '\n'.join([self.read_file(path) for path in paths])
+        return '\n'.join([self.read_file(path).decode() for path in paths])
 
     def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
@@ -232,7 +232,7 @@ class SubProcessCompressor(CompressorBase):
     def execute_command(self, command, content):
         pipe = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
             stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        pipe.stdin.write(smart_str(content))
+        pipe.stdin.write(smart_bytes(content))
         pipe.stdin.close()
 
         compressed_content = pipe.stdout.read()
